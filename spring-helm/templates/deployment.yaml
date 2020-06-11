@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Deployment.app_name }}
+spec:
+  replicas: {{ .Values.replicacount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.Deployment.app_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Deployment.app_name }}
+    spec:
+      containers:
+      - name: {{ .Values.Deployment.app_name }}
+        image: {{ .Values.Deployment.app_image_url }}
+        env:
+            - name: dbhost
+              value: "mysql-db-springboot"
+            - name: dbuser
+              value: "root"
+            - name: dbpassword
+              value: "Reva1234"
+            - name: database
+              value: "springboot"
+        ports:
+        - containerPort: {{ .Values.Deployment.app_port }}
+
+

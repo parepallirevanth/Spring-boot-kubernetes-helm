@@ -1,0 +1,18 @@
+replicacount: 1
+
+Deployment:
+  app_name: springbootapi
+  db_name: mysql-springboot
+  app_image_url: revanthacr.azurecr.io/springbootapi:1
+  app_port: 8080
+  db_port: 3306
+  
+Service:
+  db_svc_name: mysql-db-springboot
+  db_name: mysql-springboot
+  app_svc_name: springbootapi
+  db_svc_type: ClusterIP
+  app_svc_type: ClusterIP
+  app_svc_port: 80
+  app_port: 8080
+  db_svc_port: 3306

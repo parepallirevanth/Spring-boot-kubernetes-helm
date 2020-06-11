@@ -1,0 +1,65 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Values.Deployment.db_name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.Deployment.db_name }}
+  replicas: {{ .Values.replicacount }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Deployment.db_name }}
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: {{ .Values.Deployment.db_name }}
+        env:
+        - name: MYSQL_USER
+          value: Reva1234
+        - name: MYSQL_PASSWORD
+          value: Reva1234
+        - name: MYSQL_DATABASE
+          value: springboot   
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: Reva1234
+        ports:
+        - containerPort: {{ .Values.Deployment.db_port }}
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim  
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

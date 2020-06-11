@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.Service.app_svc_name }}
+  labels:
+   run: {{ .Values.Service.app_svc_name }}
+spec:
+  type: {{ .Values.Service.app_svc_type }}
+  ports:
+  - port: {{ .Values.Service.app_svc_port }}
+    targetPort: {{ .Values.Service.app_port }}
+  selector:
+    app: {{ .Values.Service.app_svc_name }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.Service.db_svc_name }}
+spec:
+  type: {{ .Values.Service.db_svc_type }}
+  ports:
+  - port: {{ .Values.Service.db_svc_port }}
+    targetPort: {{ .Values.Service.db_svc_port }}
+  selector:
+    app: {{ .Values.Service.db_name }}
